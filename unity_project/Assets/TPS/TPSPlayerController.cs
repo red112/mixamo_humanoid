@@ -35,12 +35,19 @@ public class TPSPlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Move
+        // Player
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
+        if (h!=0 || v!=0)
+        {
+            // Player direction
+            Vector3 input_movement = new Vector3(h, 0, v);
+            _playerTransform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, input_movement, Vector3.up), Vector3.up) * Quaternion.AngleAxis(_curAzimuth, Vector3.up);
 
-        // Player Position
-        _playerTransform.position += new Vector3(h, 0, v) * Time.deltaTime * _moveSpeed;
+            // Player Position
+            Vector3 rotated_movement = Quaternion.AngleAxis(_curAzimuth, Vector3.up) * input_movement;
+            _playerTransform.position += rotated_movement * Time.deltaTime * _moveSpeed;
+        }
 
 
         //Zoom
