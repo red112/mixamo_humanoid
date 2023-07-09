@@ -7,7 +7,6 @@ public class TPSPlayerController : MonoBehaviour
     [Header("Player")]
     public Transform  _playerTransform;
     public GameObject _playerModel;
-    public float _moveSpeed;
 
     [Header("Camera")]
     public Transform _camera;
@@ -20,17 +19,29 @@ public class TPSPlayerController : MonoBehaviour
     public float _curElevation;
     public float _curAzimuth;
 
+    [Header("Movement")]
+    public float _moveSpeed;
+    public Animator  _animator;
+
+
+    private Rigidbody rigidbody;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidbody = _playerTransform.GetComponentInChildren<Rigidbody>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("DDDD");
+            _animator.SetTrigger("trgJump");
+            //rigidbody.AddForce(Vector3.up*10, ForceMode.Impulse);
+        }
     }
 
     private void LateUpdate()
@@ -47,6 +58,13 @@ public class TPSPlayerController : MonoBehaviour
             // Player Position
             Vector3 rotated_movement = Quaternion.AngleAxis(_curAzimuth, Vector3.up) * input_movement;
             _playerTransform.position += rotated_movement * Time.deltaTime * _moveSpeed;
+
+            // Animation
+            _animator.SetBool("bIsRun", input_movement.magnitude > 0.1);
+
+            // Jump
+         //   if (Input.GetButtonDown("Jump"))
+
         }
 
 
